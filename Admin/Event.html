@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management</title>
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        background-color: #f4f4f4;
+    }
+
+    .navBar {
+        display: none;
+        position: absolute;
+        left: 0;
+        width: 250px;
+        top: 0;
+        height: 100%;
+        background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+        color: white;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .sidebar-hover-area {
+        position: absolute;
+        width: 25%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 900;
+    }
+
+    .navBar.open {
+        left: 0;
+    }
+
+    .sidebar {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        border-bottom: 1px solid #f3e1e1;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 15px 20px;
+        color: white;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+        background-color: #ecdddd;
+        color: rgb(245, 91, 117);
+    }
+
+
+.container {
+    margin-left: 260px; 
+    padding: 20px;
+    flex: 1;
+}
+
+
+
+h1 {
+    color: #333;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+input[type="text"], input[type="date"], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #f0a9a9;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #70c9e4;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #eceeee;
+    color: rgb(82, 182, 212);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.guest-modal-content {
+    max-width: 600px;
+    margin: 15% auto;
+    padding: 20px;
+}
+
+</style>
+
+<body>
+    <div class="sidebar-hover-area"></div>
+
+    <section class="navBar">
+        <ul class="sidebar">
+            <li><a href="Event.html">Events</a></li>
+            <li><a href="Story.html">Stories</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="../CourseAdmin.html">Course</a></li>
+        </ul>
+    </section>
+
+    <div class="container">
+        <h1>Event Management</h1>
+        <form id="event-form">
+            <input type="text" id="event-title" placeholder="Event Title" required>
+            <input type="date" id="event-date" placeholder="Date (DD Month YYYY)" required>
+            <input type="text" id="event-type" placeholder="Event Type" required>
+            <input type="text" id="event-age-group" placeholder="Age Group" required>
+            <textarea id="event-description" placeholder="Description" required></textarea>
+            <input type="text" id="event-tags" placeholder="Tags (comma separated)" required>
+            <textarea id="event-detail-description" placeholder="Detail Description" required></textarea>
+
+            <button type="submit">Add Event</button>
+        </form>
+
+        <table id="events-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Age Group</th>
+                    <th>Description</th>
+                    <th>Tags</th>
+                    <th>Detail Description</th>
+                    <th>Link</th>
+                    <th>Actions</th>
+                    <th>Guest List</th>
+                </tr>
+            </thead>
+            <tbody id="table-content"></tbody>
+        </table>
+    </div>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Edit Event</h2>
+            <form id="edit-event-form">
+                <input type="text" id="edit-event-title" placeholder="Event Title" required>
+                <input type="date" id="edit-event-date" placeholder="Date (DD Month YYYY)" required>
+                <input type="text" id="edit-event-type" placeholder="Event Type" required>
+                <input type="text" id="edit-event-age-group" placeholder="Age Group" required>
+                <textarea id="edit-event-description" placeholder="Description" required></textarea>
+                <input type="text" id="edit-event-tags" placeholder="Tags (comma separated)" required>
+                <textarea id="edit-event-detail-description" placeholder="Detail Description" required></textarea>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+
+    <div id="guest-modal" class="modal">
+        <div class="guest-modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Guest List</h2>
+            <table id="guest-list-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Tickets</th>
+                    </tr>
+                </thead>
+                <tbody id="guest-list-content"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('keydown', function(event) {
+
+            if (event.key === "Tab") {
+            
+                event.preventDefault(); 
+                document.querySelector('.navBar').style.display = 'block'; 
+            } 
+
+            else if (event.key === "Escape") {
+                document.querySelector('.navBar').style.display = 'none'; 
+            }
+        });
+
+
+
+        let rowToEdit = null;
+        let eventId = localStorage.getItem('eventId') ? parseInt(localStorage.getItem('eventId')) : 1;
+
+        window.onload = function () {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            events.forEach(event => addEventToTable(event));
+            let flag = true;
+        };
+
+        document.getElementById("event-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const title = document.getElementById("event-title").value;
+            const date = document.getElementById("event-date").value;
+            const eventType = document.getElementById("event-type").value;
+            const ageGroup = document.getElementById("event-age-group").value;
+            const description = document.getElementById("event-description").value;
+            const tags = document.getElementById("event-tags").value;
+            const detailDescription = document.getElementById("event-detail-description").value;
+
+            const newEvent = { id: eventId++, title, date, eventType, ageGroup, description, tags, detailDescription };
+
+            addEventToTable(newEvent);
+            saveEventToLocalStorage(newEvent);
+
+            document.getElementById("event-form").reset();
+            localStorage.setItem('eventId', eventId);
+        });
+
+        function addEventToTable(event) {
+            const tableContent = document.getElementById("table-content");
+            const newRow = document.createElement("tr");
+            newRow.dataset.id = event.id;
+            newRow.innerHTML = `
+                <td>${event.title}</td>
+                <td>${event.date}</td>
+                <td>${event.eventType}</td>
+                <td>${event.ageGroup}</td>
+                <td>${event.description}</td>
+                <td>${event.tags}</td>
+                <td>${event.detailDescription}</td>
+                <td><a href="#" class="event-link">Event Link</a></td>
+                <td class="actions">
+                    <button class="edit-btn">Edit</button>
+                    <button class="delete-btn">Delete</button>
+                </td>
+                <td><button class="guest-btn">View Guest List</button></td> <!-- Guest list button -->
+            `;
+            tableContent.appendChild(newRow);
+        }
+
+        function saveEventToLocalStorage(event) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            events.push(event);
+            localStorage.setItem('events', JSON.stringify(events));
+        }
+
+        document.getElementById("events-table").addEventListener("click", function (event) {
+            if (event.target.classList.contains("delete-btn")) {
+                const row = event.target.closest("tr");
+                const id = row.dataset.id;
+                deleteEventFromLocalStorage(id);
+                row.remove();
+            } else if (event.target.classList.contains("edit-btn")) {
+                const row = event.target.closest("tr");
+                const title = row.cells[0].innerText;
+                const date = row.cells[1].innerText;
+                const eventType = row.cells[2].innerText;
+                const ageGroup = row.cells[3].innerText;
+                const description = row.cells[4].innerText;
+                const tags = row.cells[5].innerText;
+                const detailDescription = row.cells[6].innerText;
+
+                document.getElementById("edit-event-title").value = title;
+                document.getElementById("edit-event-date").value = date;
+                document.getElementById("edit-event-type").value = eventType;
+                document.getElementById("edit-event-age-group").value = ageGroup;
+                document.getElementById("edit-event-description").value = description;
+                document.getElementById("edit-event-tags").value = tags;
+                document.getElementById("edit-event-detail-description").value = detailDescription;
+
+                rowToEdit = row;
+                document.getElementById("edit-modal").style.display = "block";
+            } else if (event.target.classList.contains("guest-btn")) {
+                const row = event.target.closest("tr");
+                const id = row.dataset.id;
+                showGuestList(id);
+            }
+        });
+
+        function deleteEventFromLocalStorage(id) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const filteredEvents = events.filter(event => event.id != id);
+            localStorage.setItem('events', JSON.stringify(filteredEvents));
+        }
+
+        document.querySelectorAll(".close-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                document.getElementById("edit-modal").style.display = "none";
+                document.getElementById("guest-modal").style.display = "none";
+            });
+        });
+
+        document.getElementById("edit-event-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const title = document.getElementById("edit-event-title").value;
+            const date = document.getElementById("edit-event-date").value;
+            const eventType = document.getElementById("edit-event-type").value;
+            const ageGroup = document.getElementById("edit-event-age-group").value;
+            const description = document.getElementById("edit-event-description").value;
+            const tags = document.getElementById("edit-event-tags").value;
+            const detailDescription = document.getElementById("edit-event-detail-description").value;
+
+            const updatedEvent = {
+                id: parseInt(rowToEdit.dataset.id),
+                title,
+                date,
+                eventType,
+                ageGroup,
+                description,
+                tags,
+                detailDescription
+            };
+
+            updateEventInLocalStorage(updatedEvent);
+            updateTableRow(updatedEvent);
+
+            document.getElementById("edit-modal").style.display = "none";
+            rowToEdit = null;
+        });
+
+        function updateEventInLocalStorage(updatedEvent) {
+            const events = JSON.parse(localStorage.getItem('events')) || [];
+            const eventIndex = events.findIndex(event => event.id === updatedEvent.id);
+            if (eventIndex !== -1) {
+                events[eventIndex] = updatedEvent;
+                localStorage.setItem('events', JSON.stringify(events));
+            }
+        }
+
+        function updateTableRow(updatedEvent) {
+            rowToEdit.cells[0].innerText = updatedEvent.title;
+            rowToEdit.cells[1].innerText = updatedEvent.date;
+            rowToEdit.cells[2].innerText = updatedEvent.eventType;
+            rowToEdit.cells[3].innerText = updatedEvent.ageGroup;
+            rowToEdit.cells[4].innerText = updatedEvent.description;
+            rowToEdit.cells[5].innerText = updatedEvent.tags;
+            rowToEdit.cells[6].innerText = updatedEvent.detailDescription;
+        }
+
+
+        function showGuestList(eventId) {
+            const guestListContent = document.getElementById("guest-list-content");
+            guestListContent.innerHTML = "";
+
+            const registrations = JSON.parse(localStorage.getItem("registrations")) || [];
+
+
+            const guests = registrations.filter(guest => guest.eventId === parseInt(eventId));
+
+            if (guests.length > 0) {
+                guests.forEach(guest => {
+                    const newRow = document.createElement("tr");
+                    newRow.innerHTML = `
+                        <td>${guest.name}</td>
+                        <td>${guest.email}</td>
+                        <td>${guest.phone}</td>
+                        <td>${guest.tickets}</td>
+                    `;
+                    guestListContent.appendChild(newRow);
+                });
+            } else {
+                guestListContent.innerHTML = "<tr><td colspan='4'>No guests registered for this event.</td></tr>";
+            }
+
+            document.getElementById("guest-modal").style.display = "block"; // Show the modal
+        }
+
+
+        document.querySelectorAll(".close-btn").forEach(button => {
+            button.addEventListener("click", function () {
+                document.getElementById("guest-modal").style.display = "none";
+            });
+        });
+    </script>
+</body>
+
+</html>

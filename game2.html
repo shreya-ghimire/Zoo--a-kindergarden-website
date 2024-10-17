@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game with Timer and Score Saving</title>
+</head>
+
+<style>
+   /* Global Styling */
+body {
+    font-family: 'Arial', sans-serif;
+
+    color: #2c2c2c;
+   
+    justify-content: center;
+ 
+    height: 90vh;
+    padding:20px;
+    margin: 0;
+}
+
+h3 {
+    font-size: 2rem;
+    text-align: center;
+    color: #2b2a2a;
+}
+.memory-game{
+   
+}
+
+
+#timer {
+    font-size: 36px;
+    background-color: #fdcccc;
+    padding: 15px 25px;
+    border-radius: 10px;
+    color: #353535;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+
+#grid {
+   
+    background-image: url('https://i.pinimg.com/736x/ea/3d/c0/ea3dc0a99c35f658cc563f80269a144c.jpg');
+    background-size: cover;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-template-rows: repeat(3, 1fr); 
+    gap: 15px;
+    width: 50%;
+    margin: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+
+.cardItem {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    background-color: #444;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+}
+
+
+.cardItem:hover {
+    transform: scale(1.05);
+}
+
+
+.cardItem.matched {
+    border: 3px solid #76c7c0;
+    opacity: 1;
+}
+
+
+@media (max-width: 768px) {
+    #grid {
+        grid-template-columns: repeat(2, 1fr); 
+        grid-template-rows: repeat(6, 1fr); 
+        width: 90%;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+    }
+
+    #timer {
+        font-size: 24px;
+        padding: 10px 15px;
+    }
+}
+
+</style>
+
+<body>
+    <section class="game-section">
+        <div class="memory-game">
+            <h3>Time: <span id="timer">0</span> seconds</h3>
+            <div id="grid"></div>
+        </div>
+    </section>
+    <script src="script/games.js"></script>
+
+    <script>
+        const cardArray = [
+            { name: 'fries', img: 'images/memory/1.png' },
+            { name: 'cheeseburger', img: 'images/memory/2.png' },
+            { name: 'ice-cream', img: 'images/memory/3.png' },
+            { name: 'pizza', img: 'images/memory/4.png' },
+            { name: 'milkshake', img: 'images/memory/5.png' },
+            { name: 'hotdog', img: 'images/memory/6.png' },
+            { name: 'fries', img: 'images/memory/1.png' },
+            { name: 'cheeseburger', img: 'images/memory/2.png' },
+            { name: 'ice-cream', img: 'images/memory/3.png' },
+            { name: 'pizza', img: 'images/memory/4.png' },
+            { name: 'milkshake', img: 'images/memory/5.png' },
+            { name: 'hotdog', img: 'images/memory/6.png' }
+        ];
+
+        let chosenCards = [];
+        let count = 0;
+        let matchedPairs = 0;
+        let timer;
+        let secondsElapsed = 0;
+
+        // Shuffle the card array
+        cardArray.sort(() => 0.5 - Math.random());
+
+        const gridContainer = document.querySelector("#grid");
+
+        // Display the grid of cards
+        function displayGrid() {
+            cardArray.forEach((card, index) => {
+                const cardItem = document.createElement("div");
+                cardItem.className = "cardItem";
+                cardItem.style.backgroundImage = `url(${card.img})`;
+                cardItem.style.opacity = "0";
+                cardItem.style.border = "white solid 1px";
+        
+                gridContainer.appendChild(cardItem);
+
+                // Add click event to each card
+                cardItem.addEventListener('click', function () {
+                    if (chosenCards.length < 2 && cardItem.style.opacity === "0") {
+                        chosenCards.push({
+                            cardId: index,
+                            cardName: card.name,
+                            cardElement: cardItem 
+                        });
+
+                        cardItem.style.opacity = "1";
+                        cardItem.style.transition="";
+                        count++;
+
+                        // Check for a match after two cards are clicked
+                        if (count === 2) {
+                            setTimeout(() => {
+                                checkMatch(); 
+                            }, 1000); 
+                        }
+                    }
+                });
+            });
+        }
+
+        // Check if the two selected cards match
+        function checkMatch() {
+            const [firstCard, secondCard] = chosenCards; 
+
+            if (firstCard.cardName === secondCard.cardName) {
+                matchedPairs++;
+            } else {
+                // Hide the cards if they don't match
+                firstCard.cardElement.style.opacity = "0";
+                secondCard.cardElement.style.opacity = "0";
+            }
+
+            chosenCards = [];
+            count = 0;
+
+            // Check if all pairs are matched
+            if (matchedPairs === cardArray.length / 2) {
+                clearInterval(timer);  // Stop the timer
+                saveScoreToUser(secondsElapsed);  // Save the score
+                alert(`Congratulations! You've completed the game in ${secondsElapsed} seconds.`);
+            }
+        }
+
+        // Start the timer when the game begins
+        function startTimer() {
+            timer = setInterval(() => {
+                secondsElapsed++;
+                document.querySelector("#timer").textContent = secondsElapsed;
+            }, 1000);
+        }
+
+     
+        function saveScoreToUser(score) {
+
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    // Retrieve the users array from localStorage (which contains multiple user objects)
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (currentUser) {
+        // Find the user in the users array who has the same username as currentUser
+        const userIndex = users.findIndex(user => user.username === currentUser.username);
+
+        if (userIndex !== -1) {
+            // Update the memoryGame score for the found user in the users array
+            users[userIndex].games.memoryGame = score;
+
+            // Also update the currentUser object to keep them in sync
+            currentUser.games.memoryGame = score;
+
+            // Save the updated users array back to localStorage
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // Save the updated currentUser back to localStorage
+            localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+            console.log(`Memory game score of ${score} seconds saved for user ${currentUser.username}.`);
+        } else {
+            console.error("User with the same username not found in the users list.");
+        }
+    } else {
+        console.error("No current user found in localStorage.");
+    }
+}
+
+
+        window.onload = () => {
+            displayGrid();
+            startTimer(); 
+        };
+
+    </script>
+</body>
+
+</html>

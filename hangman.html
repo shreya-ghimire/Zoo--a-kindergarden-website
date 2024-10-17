@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f9f7f7;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            justify-content: center;
+        }
+
+        .game-container {
+            text-align: center;
+            background-color: #ffebcd;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #ff6f61;
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .word-display {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .hangman-display {
+            margin-top: 20px;
+        }
+
+        .hangman-display img {
+            width: 200px;
+            border-radius: 10px;
+        }
+
+        .input-section {
+            margin-top: 20px;
+        }
+
+        .input-section input {
+            font-size: 2rem;
+            padding: 10px;
+            text-transform: uppercase;
+            border: 2px solid #ff6f61;
+            border-radius: 8px;
+            outline: none;
+            width: 80px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .input-section button {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .input-section button:hover {
+            background-color: #ff3b2f;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .button-container {
+            margin-top: 20px;
+        }
+
+        .button-container button {
+            font-size: 1.5rem;
+            padding: 10px 20px;
+            background-color: #86dce7;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button-container button:hover {
+            background-color: #f1f1f1;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="game-container">
+        <h1>Hangman Game</h1>
+
+        <div class="word-display">_ _ _ _ _ </div>
+
+        <div class="hangman-display">
+            <img src="" alt="Hangman Image">
+        </div>
+
+        <div class="input-section">
+            <label for="guess">Guess a letter:</label>
+            <input type="text" id="guess" maxlength="1" />
+            <button id="submit-btn">Submit</button>
+        </div>
+
+        <div class="message"></div>
+
+        <div class="button-container">
+            <button id="new-game-btn">New Game</button>
+        </div>
+    </div>
+    <script src="script/games.js"></script>
+
+    <script>
+        const words = [
+            { real: "ORANGE", dummy: "O____G_", img: "https://stratkomuncut.wordpress.com/wp-content/uploads/2013/02/orange1.jpg" },
+            { real: "APPLE", dummy: "A___E", img: "https://t4.ftcdn.net/jpg/02/52/93/81/360_F_252938192_JQQL8VoqyQVwVB98oRnZl83epseTVaHe.jpg" },
+            { real: "WATERMELON", dummy: "W____M____", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRd4wlDy34ztjX-HJFEnGt52vgEUzH3-7Gxpw&s" },
+            { real: "BANANA", dummy: "B_____", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Banana-Single.jpg/1200px-Banana-Single.jpg" },
+            { real: "COCONUT", dummy: "C_C_N_T", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTylOp_lHaAlYng7nITXIz6JKY_Q13z0-el_A&s" }
+        ];
+
+        let chosenWord, displayedWord, wrongAttempts, maxAttempts = 6, hangmanImage;
+
+        const wordDisplayDiv = document.querySelector('.word-display');
+        const messageDiv = document.querySelector('.message');
+        const hangmanImg = document.querySelector('.hangman-display img');
+        const guessInput = document.getElementById('guess');
+        const submitBtn = document.getElementById('submit-btn');
+        const newGameBtn = document.getElementById('new-game-btn');
+
+        function newGame() {
+            wrongAttempts = 0;
+            messageDiv.textContent = "";
+
+  
+            const index = Math.floor(Math.random() * words.length);
+            chosenWord = words[index].real;
+            displayedWord = words[index].dummy;
+
+            
+            hangmanImage = words[index].img;
+            hangmanImg.src = hangmanImage; 
+
+            updateWordDisplay();
+
+            guessInput.value = '';
+            guessInput.disabled = false;
+            submitBtn.disabled = false;
+        }
+
+        function updateWordDisplay() {
+            wordDisplayDiv.textContent = displayedWord.split('').join(' ');
+        }
+
+        function updateHangmanImage() {
+          
+            hangmanImg.src = hangmanImage; 
+        }
+
+        function checkGuess(letter) {
+            let updatedWord = '';
+            let isCorrect = false;
+
+            for (let i = 0; i < chosenWord.length; i++) {
+                if (chosenWord[i] === letter) {
+                    updatedWord += letter;
+                    isCorrect = true;
+                } else {
+                    updatedWord += displayedWord[i];
+                }
+            }
+
+            displayedWord = updatedWord;
+            updateWordDisplay();
+
+            if (!isCorrect) {
+                wrongAttempts++;
+                updateHangmanImage();
+            }
+
+            if (displayedWord === chosenWord) {
+                messageDiv.textContent = "You win!";
+                endGame();
+            } else if (wrongAttempts >= maxAttempts) {
+                messageDiv.textContent = `You lose! The word was ${chosenWord}.`;
+                endGame();
+            }
+        }
+
+        function endGame() {
+            guessInput.disabled = true;
+            submitBtn.disabled = true;
+        }
+
+        submitBtn.addEventListener('click', () => {
+            const guess = guessInput.value.toUpperCase();
+            if (guess && /^[A-Z]$/.test(guess)) {
+                checkGuess(guess);
+            }
+            guessInput.value = '';
+        });
+
+        newGameBtn.addEventListener('click', newGame);
+
+
+        newGame();
+    </script>
+</body>
+
+</html>

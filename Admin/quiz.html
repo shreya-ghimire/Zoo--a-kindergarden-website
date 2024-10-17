@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            background-color: #f4f4f4;
+        }
+
+        .navBar {
+            display: none;
+            position: absolute;
+            left: 0;
+            width: 250px;
+            top: 0;
+            height: 100%;
+            background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+            color: white;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-hover-area {
+            position: absolute;
+            width: 25%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            z-index: 900;
+        }
+
+        .navBar.open {
+            left: 0;
+        }
+
+        .sidebar {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            border-bottom: 1px solid #f3e1e1;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #ecdddd;
+            color: rgb(245, 91, 117);
+        }
+
+
+        .container {
+            margin-left: 260px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex: 1;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="url"],
+        input[type="button"],
+        button {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #70c9e4;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+
+        button:hover {
+            background-color: #eceeee;
+            color: rgb(82, 182, 212);
+        }
+
+        #chapters {
+            margin-top: 20px;
+        }
+
+        .chapter {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content h2 {
+            color: #333;
+        }
+
+        .modal-content label {
+            margin-top: 10px;
+        }
+
+        .modal-content input[type="text"],
+        .modal-content select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .quiz {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .quiz h3 {
+            margin: 0;
+            color: #007bff;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="sidebar-hover-area"></div>
+
+    <section class="navBar">
+        <ul class="sidebar">
+            <li><a href="Event.html">Events</a></li>
+            <li><a href="Story.html">Stories</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="../CourseAdmin.html">Course</a></li>
+        </ul>
+    </section>
+    <div class="container">
+        <h1>Admin Quiz Creation</h1>
+        <label for="quiz-name">Quiz name</label>
+        <input type="text" id="quiz-name" placeholder="Enter quiz name">
+        <button id="addQuizBtn">Add Quiz</button>
+        <div id="chapters"></div>
+        <button type="submit" id="submit-quiz">Submit quiz</button>
+        <div id="quiz-content"></div>
+    </div>
+
+
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" style="cursor:pointer;">&times;</span>
+            <h2>Edit Question</h2>
+            <form id="editQuestionForm">
+                <label for="editQuestionText">Question:</label>
+                <input type="text" id="editQuestionText" required>
+                <br><br>
+                <label for="editQuestionType">Question Type:</label>
+                <select id="editQuestionType">
+                    <option value="text">Text</option>
+                    <option value="image">Image</option>
+                    <option value="audio">Audio</option>
+                    <option value="video">Video</option>
+                </select>
+                <br><br>
+                <label>Options (comma-separated):</label>
+                <input type="text" id="editQuestionOptions" required>
+                <br><br>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('keydown', function (event) {
+
+            if (event.key === "Tab") {
+
+                event.preventDefault();
+                document.querySelector('.navBar').style.display = 'block';
+            }
+
+            else if (event.key === "Escape") {
+                document.querySelector('.navBar').style.display = 'none';
+            }
+        });
+
+
+
+        let chapters = [];
+        let stories = JSON.parse(localStorage.getItem('stories')) || [];
+
+        const quizAdd = document.querySelector('#addQuizBtn');
+        let questionIndex = 0;
+        let quizzes = [];
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const storedQuizzes = JSON.parse(localStorage.getItem('quizzes'));
+            if (storedQuizzes) {
+                quizzes = storedQuizzes;
+                renderQuizzes();
+            }
+        });
+
+        quizAdd.addEventListener('click', function () {
+            const addQuestion = document.createElement('button');
+            addQuestion.type = "button";
+            addQuestion.textContent = "Add Chapter";
+            const chaptersContainer = document.querySelector('#chapters');
+            chaptersContainer.appendChild(addQuestion);
+
+            let chapters = [];
+            addQuestion.addEventListener('click', function () {
+                const chapter = document.createElement('div');
+                chapter.className = "chapter";
+                chapter.innerHTML = `
+                    <form id="chapter-form${questionIndex}">
+                        <label for="question${questionIndex}">Enter Question ${questionIndex + 1}:</label>
+                        <input type="text" id="question${questionIndex}" name="question${questionIndex}" placeholder="Enter Question">
+
+                        <label for="questionType${questionIndex}">Question Type:</label>
+                        <select id="questionType${questionIndex}" name="questionType${questionIndex}">
+                            <option value="text">Text</option>
+                            <option value="image">Image</option>
+                            <option value="audio">Audio</option>
+                            <option value="video">Video</option>
+                        </select>
+
+                        <div id="inputContainer${questionIndex}" class="input-container"></div>
+
+                        <label>Options for Question ${questionIndex + 1}:</label>
+                        <input type="text" class="option" placeholder="Option 1">
+                        <input type="text" class="option" placeholder="Option 2">
+                        <input type="text" class="option" placeholder="Option 3">
+                        <input type="text" class="option" placeholder="Option 4">
+                        <label for="correctOption${questionIndex}">Correct Option:</label>
+                        <input type="text" class="correct" id="correctOption${questionIndex}" placeholder="Enter the correct option">
+
+                        <input type="button" value="Add" class="chapterSubmit" data-index="${questionIndex}">
+                    </form>
+                `;
+
+                chaptersContainer.appendChild(chapter);
+
+                const questionTypeSelect = chapter.querySelector(`#questionType${questionIndex}`);
+                const inputContainer = chapter.querySelector(`#inputContainer${questionIndex}`);
+
+                questionTypeSelect.addEventListener('change', function () {
+                    const selectedType = questionTypeSelect.value;
+                    inputContainer.innerHTML = '';
+
+                    if (selectedType === "text") {
+                        const textInput = document.createElement('input');
+                        textInput.type = "text";
+                        textInput.placeholder = "Enter your text here";
+                        inputContainer.appendChild(textInput);
+                    } else if (selectedType === "image") {
+                        const imageInput = document.createElement('input');
+                        imageInput.type = "url";
+                        imageInput.placeholder = "Enter image URL";
+                        inputContainer.appendChild(imageInput);
+                    } else if (selectedType === "audio") {
+                        const audioInput = document.createElement('input');
+                        audioInput.type = "url";
+                        audioInput.placeholder = "Enter audio URL";
+                        inputContainer.appendChild(audioInput);
+                    } else if (selectedType === "video") {
+                        const videoUrlInput = document.createElement('input');
+                        videoUrlInput.type = "url";
+                        videoUrlInput.placeholder = "Enter video URL";
+                        inputContainer.appendChild(videoUrlInput);
+                    }
+                });
+
+                chapter.querySelector('.chapterSubmit').addEventListener('click', function () {
+                    saveChapter(chapter, chapters);
+                });
+
+                questionIndex++;
+            });
+
+            document.getElementById("submit-quiz").addEventListener('click', function () {
+                const quizName = document.getElementById('quiz-name').value;
+                if (quizName.trim() === '') {
+                    alert('Please enter a quiz name.');
+                    return;
+                }
+
+                const quizData = {
+                    name: quizName,
+                    chapters: chapters
+                };
+
+                quizzes.push(quizData);
+                localStorage.setItem('quizzes', JSON.stringify(quizzes));
+                alert('Quiz submitted successfully!');
+
+                renderQuizzes();
+                document.getElementById('quiz-name').value = '';
+                document.getElementById('chapters').innerHTML = '';
+                questionIndex = 0;
+            });
+        });
+
+        function saveChapter(chapterElement, chapters) {
+            const questionForm = chapterElement.querySelector('form');
+            const questionText = questionForm.querySelector('input[type="text"]').value;
+            const questionType = questionForm.querySelector('select').value;
+            const correctOption = questionForm.querySelector('.correct').value;
+
+            const chapterData = {
+                question: questionText,
+                type: questionType,
+                url: '',
+                options: [],
+                correctOption: correctOption
+
+            };
+
+            if (questionType !== "text") {
+                const urlInput = questionForm.querySelector('input[type="url"]');
+                chapterData.url = urlInput ? urlInput.value : '';
+            }
+
+            const optionInputs = questionForm.querySelectorAll('.option');
+            optionInputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    chapterData.options.push(input.value.trim());
+                }
+            });
+
+            chapters.push(chapterData);
+            console.log("Chapter saved:", chapterData);
+        }
+
+        function renderQuizzes() {
+            const quizContent = document.getElementById('quiz-content');
+            quizContent.innerHTML = '';
+
+            quizzes.forEach((quiz, index) => {
+                const quizDiv = document.createElement('div');
+                quizDiv.className = "quiz";
+                quizDiv.innerHTML = `<h3>${quiz.name}</h3>`;
+                quiz.chapters.forEach((chapter, i) => {
+                    const chapterDiv = document.createElement('div');
+                    chapterDiv.className = "chapter";
+                    chapterDiv.innerHTML = `<p>Q${i + 1}: ${chapter.question}</p>`;
+                    quizDiv.appendChild(chapterDiv);
+                });
+                quizContent.appendChild(quizDiv);
+            });
+        }
+    </script>
+</body>
+
+</html>

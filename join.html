@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<!-- setting primary language to website -->
+<html lang="en">
+
+<head>
+    <!-- meta data is used to specify data for the website -->
+    <!-- utf contains all characters from human language -->
+    <meta charset="UTF-8">
+
+    <!-- to specify viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- to specify author and description -->
+    <meta name="name" content="Shreya">
+    <meta name="description" content="This website has information about children Zoo">
+
+    <title>Welcome to the Jungle</title>
+    <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+
+    <!-- Adding font to the website -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Protest+Guerrilla&display=swap" rel="stylesheet">
+    <!-- Adding favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Adding stylesheet to html doc -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="style/style.css">
+
+</head>
+
+<body background="https://i.pinimg.com/originals/ee/74/fb/ee74fb1d8e118dab50167dcb9b53a523.png">
+    <header id="header">
+        <nav id="nav-header" class="navbar navbar-expand-md navbar-light ">
+            <div class="container-fluid">
+
+                <a id="logo" class="navbar-brand" href="#">
+                    <img src="https://png.pngtree.com/png-vector/20240318/ourmid/pngtree-golden-lion-head-mascot-png-image_12003243.png"
+                        alt="Logo" width="40">
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div id="navbarNav" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="explore.html">Explore</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="events.html">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="story.html">Story</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About
+                                Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact
+                                Us</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+    </header>
+    <main>
+        <section class="main">
+
+            <div class="baner-join">
+                <h1 class="title-banner">Membership application</h1>
+                <div class="btn-group">
+                    <label for="form1-btn" id="gold">Gold</label>
+                    <label for="form2-btn" id="silver">Silver</label>
+                    <label for="form3-btn" id="bronze">Bronze</label>
+                </div>
+
+            </div>
+
+            <input type="radio" id="form1-btn" name="form-toggle">
+            <input type="radio" id="form2-btn" name="form-toggle" checked>
+            <input type="radio" id="form3-btn" name="form-toggle">
+
+            <div class="forms-join">
+
+                <div class="form-container-join form1">
+
+                    <div class="form-section-join">
+                        <div class="div-form-container">
+                            <div class="content">
+                                <div class="gold-join-content">
+                                    <h2>Gold</h2>
+                                    <div>
+                                        <ul>
+                                            <li>Access to basic events</li>
+                                            <li>Exclusive newsletters</li>
+                                            <li>Member-only deals</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <form action="#" method="post" id="goldForm">
+                                <table>
+                                    <tr>
+                                        <td><label for="studentName">Student's
+                                                Full
+                                                Name:</label></td>
+                                        <td><input type="text" id="studentName" name="studentName" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="studentAge">Student's
+                                                Age:</label></td>
+                                        <td><input type="number" id="studentAge" name="studentAge" min="3" max="6"
+                                                required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="studentGender">Gender:</label></td>
+                                        <td>
+                                            <select id="studentGender" name="studentGender" required>
+                                                <option value>Select</option>
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                                <option value="other">Other</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="parentName">Parent/Guardian's
+                                                Name:</label></td>
+                                        <td><input type="text" id="parentName" name="parentName" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="contactNumber">Contact
+                                                Number:</label></td>
+                                        <td><input type="text" id="contactNumber" name="contactNumber" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="email">Email
+                                                Address:</label></td>
+                                        <td><input type="email" id="email" name="email" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="address">Home
+                                                Address:</label></td>
+                                        <td><input type="text" id="address" name="address" required></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="emergencyContact">Emergency
+                                                Contact Name:</label></td>
+                                        <td><input type="text" id="emergencyContact" name="emergencyContact" required>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><label for="emergencyNumber">Emergency
+                                                Contact Number:</label></td>
+                                        <td><input type="text" id="emergencyNumber" name="emergencyNumber" required>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <br>
+                                <input type="submit" value="Submit Membership Form">
+                            </form>
+
+                        </div>
+                        <div class="picture-effect">
+                            <div class="collage">
+                                <div class="img-container"><img src="images/11.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/2.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/3.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/4.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/5.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/6.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/11.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/2.png" alt="Image 1"></div>
+                                <div class="img-container"><img src="images/3.png" alt="Image 1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="form-container-join form2">
+                    <div class="div-form-container">
+                        <div class="content">
+                            <div class="silver-join-content">
+                                <h2>Silver</h2>
+                                <div>
+                                    <ul>
+                                        <li>Access to basic events</li>
+                                        <li>Exclusive newsletters</li>
+                                        <li>Member-only deals</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <form action="#" method="post" id="silverForm">
+                            <table>
+                                <tr>
+                                    <td><label for="studentName">Student's
+                                            Full
+                                            Name:</label></td>
+                                    <td><input type="text" id="studentName" name="studentName" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="studentAge">Student's
+                                            Age:</label></td>
+                                    <td><input type="number" id="studentAge" name="studentAge" min="3" max="6" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label for="studentGender">Gender:</label></td>
+                                    <td>
+                                        <select id="studentGender" name="studentGender" required>
+                                            <option value>Select</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label for="parentName">Parent/Guardian's
+                                            Name:</label></td>
+                                    <td><input type="text" id="parentName" name="parentName" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="contactNumber">Contact
+                                            Number:</label></td>
+                                    <td><input type="text" id="contactNumber" name="contactNumber" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="email">Email
+                                            Address:</label></td>
+                                    <td><input type="email" id="email" name="email" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="address">Home
+                                            Address:</label></td>
+                                    <td><input type="text" id="address" name="address" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="emergencyContact">Emergency
+                                            Contact Name:</label></td>
+                                    <td><input type="text" id="emergencyContact" name="emergencyContact" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="emergencyNumber">Emergency
+                                            Contact Number:</label></td>
+                                    <td><input type="text" id="emergencyNumber" name="emergencyNumber" required></td>
+                                </tr>
+                            </table>
+                            <br>
+                            <input type="submit" value="Submit Membership Form">
+                        </form>
+
+                    </div>
+                    <div class="picture-effect">
+                        <div class="collage">
+                            <div class="img-container"><img src="images/11.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/2.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/3.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/4.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/5.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/6.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/11.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/2.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/3.png" alt="Image 1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-container-join form3">
+                    <div class="div-form-container">
+                        <div class="content">
+                            <div class="bronze-join-content">
+                                <h2>Bronze</h2>
+                                <div>
+                                    <ul>
+                                        <li>Access to basic events</li>
+                                        <li>Exclusive newsletters</li>
+                                        <li>Member-only deals</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <form action="#" method="post" id="bronzeForm">
+                            <table>
+                                <tr>
+                                    <td><label for="studentName">Student's
+                                            Full
+                                            Name:</label></td>
+                                    <td><input type="text" id="studentName" name="studentName" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="studentAge">Student's
+                                            Age:</label></td>
+                                    <td><input type="number" id="studentAge" name="studentAge" min="3" max="6" required>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label for="studentGender">Gender:</label></td>
+                                    <td>
+                                        <select id="studentGender" name="studentGender" required>
+                                            <option value>Select</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label for="parentName">Parent/Guardian's
+                                            Name:</label></td>
+                                    <td><input type="text" id="parentName" name="parentName" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="contactNumber">Contact
+                                            Number:</label></td>
+                                    <td><input type="text" id="contactNumber" name="contactNumber" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="email">Email
+                                            Address:</label></td>
+                                    <td><input type="email" id="email" name="email" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="address">Home
+                                            Address:</label></td>
+                                    <td><input type="text" id="address" name="address" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="emergencyContact">Emergency
+                                            Contact Name:</label></td>
+                                    <td><input type="text" id="emergencyContact" name="emergencyContact" required></td>
+                                </tr>
+                                <tr>
+                                    <td><label for="emergencyNumber">Emergency
+                                            Contact Number:</label></td>
+                                    <td><input type="text" id="emergencyNumber" name="emergencyNumber" required></td>
+                                </tr>
+                            </table>
+                            <br>
+                            <input type="submit" value="Submit Membership Form">
+                        </form>
+
+                    </div>
+                    <div class="picture-effect">
+                        <div class="collage">
+                            <div class="img-container"><img src="images/11.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/2.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/3.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/4.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/5.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/6.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/11.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/2.png" alt="Image 1"></div>
+                            <div class="img-container"><img src="images/3.png" alt="Image 1"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            </div>
+        </section>
+    </main>
+
+    <!-- footer -->
+    <footer class="footer-main">
+        <div class="footer-container">
+            <div class="footer-icons">
+                <div class="img-icons">
+                    <a href="https://www.instagram.com" target="_blank">
+                        <img src="images/instagram.png" alt="Instagram"></a>
+                </div>
+                <div class="img-icons">
+                    <a href="https://www.facebook.com" target="_blank">
+                        <img src="images/facebook.png" alt="Facebook"></a>
+                </div>
+                <div class="img-icons">
+                    <a href="https://www.snapchat.com" target="_blank">
+                        <img src="images/snapchat.png" alt="Snapchat"></a>
+                </div>
+                <div class="img-icons">
+                    <a href="https://www.linkedin.com" target="_blank">
+                        <img src="images/linkedin.png" alt="LinkedIn"></a>
+                </div>
+                <div class="img-icons">
+                    <a href="https://www.discord.com" target="_blank">
+                        <img src="images/discord.png" alt="Discord"></a>
+                </div>
+            </div>
+
+            <div class="footer-list">
+                <div class="footer-row">
+                    <div class="footer-form">
+                        <p>Connect with us through our emails</p>
+                        <a
+                            href="mailto:shreya.ghimire@247software?cc=name2@rapidtables.com&bcc=name3@rapidtables.com&subject=The%20subject%20of%20the%20email&body=The%20body%20of%20the%20email">
+                            <button class="footer-btn">Email Us</button>
+                        </a>
+                    </div>
+                    <div class="footer-form">
+                        <div class="address">
+                            <p>Eco Tower, Baner - Pashan Link Rd, Baner,
+                                Pune, Maharashtra 411045</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-row">
+                    <div class="footer-list-topics">
+                        <ul>
+                            <li class="list-title">Pages</li>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Explore</a></li>
+                            <li><a href="#">Events</a></li>
+                            <li><a href="#">Members</a></li>
+                            <li><a href="#">Story</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                        <ul>
+                            <li class="list-title">Policies</li>
+                            <li><a href="#">Policy</a></li>
+                            <li><a href="#">Terms</a></li>
+                            <li><a href="#">Planning</a></li>
+                        </ul>
+                        <ul>
+                            <li class="list-title">Career</li>
+                            <li><a href="#"> author</a></li>
+                            <li><a href="#">Teacher</a></li>
+                            <li><a href="#">Tutor</a></li>
+                            <li><a href="#">Others</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-row">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.45637903873!2d73.79449247519244!3d18.553452482546472!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf20cd3216a5%3A0xe7c3e8ac1b83cd33!2sVascon%20Eco%20Tower!5e0!3m2!1sen!2sin!4v1726213284859!5m2!1sen!2sin"
+                        width="100%" height="300" style="border:0;" allowfullscreen loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <p class="footer-end">&copy; 2024 Your Company. All rights
+            reserved.</p>
+    </footer>
+
+    <!-- Footer-ends -->
+    <script>
+     
+        const goldForm = document.getElementById('goldForm');
+
+        const silverForm = document.getElementById('silverForm');
+        const bronzeForm = document.getElementById('bronzeForm');
+
+        let currentUser = localStorage.getItem('currentUser');
+        let users = JSON.parse(localStorage.getItem('users'));
+        const nowuser=users.find(user=>(user.username=currentUser));
+        console.log(currentUser);
+        console.log(users);
+        console.log(nowuser);
+
+        function updateMembership(membership) {
+           
+            nowuser.membership = membership;
+            console.log(users);
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        goldForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            updateMembership('Gold');
+            alert('Membership updated to Gold');
+        });
+
+        silverForm.addEventListener('submit', (e) => {
+            console.log("j");
+            e.preventDefault();
+            updateMembership('Silver');
+            alert('Membership updated to Silver');
+        });
+
+        bronzeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            updateMembership('Bronze');
+            alert('Membership updated to Bronze');
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

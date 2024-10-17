@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+       .form-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.form-container {
+    background-color: #ffffff; /* White background for form */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 90%; /* Responsive width */
+    max-width: 600px; /* Maximum width */
+}
+
+h2 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    color: #181414; /* Dark text color */
+    margin-bottom: 20px; /* Spacing below the header */
+}
+
+label {
+    display: block; /* Makes label take full width */
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    margin: 10px 0 5px; /* Spacing for labels */
+    color: #464646; /* Gray color for labels */
+}
+
+input[type="text"],
+textarea {
+    width: 100%; /* Full width for input and textarea */
+    padding: 10px;
+    border: 1px solid #ccc; /* Light border */
+    border-radius: 5px; /* Rounded corners */
+    margin-bottom: 15px; /* Spacing below inputs */
+    font-family: "Poppins", sans-serif; /* Font for inputs */
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #ff758c; /* Highlight border on focus */
+    outline: none; /* Remove outline */
+}
+
+button[type="submit"] {
+    background-color: #ff758c; /* Button background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    padding: 10px 20px; /* Spacing inside button */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor */
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+button[type="submit"]:hover {
+    background-color: #ff7eb3; /* Darker shade on hover */
+}
+
+        
+    </style>
+</head>
+
+<body>
+
+    <section class="form-section">
+        <div class="form-container">
+            <h2>Submit Your Testimonial</h2>
+            <form id="testimonialForm">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+    
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+    
+                <label for="review">Review:</label>
+                <textarea id="review" name="review" rows="5" required></textarea>
+    
+          
+    
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </section>
+    
+    <script>
+        document.getElementById('testimonialForm').addEventListener('submit', function(event) {
+            event.preventDefault(); 
+    
+      
+            const name = document.getElementById('name').value;
+            const city = document.getElementById('city').value;
+            const review = document.getElementById('review').value;
+            const ratingImg = "./images/rating.png";
+    
+        
+            const testimonial = {
+                name: name,
+                city: city,
+                review: review,
+                ratingImg: ratingImg
+            };
+    
+        
+            fetch('http://localhost:5000/testimonial', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(testimonial)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            
+                document.getElementById('testimonialForm').reset();
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>

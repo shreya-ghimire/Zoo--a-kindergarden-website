@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake and Ladder</title>
+    <!-- Link to Google Fonts for better typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Container for the game */
+        .snake-n-ladder {
+            display: flex;
+        
+            align-items: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        /* Game Board Styles */
+        #game-snake-container {
+            display: grid;
+            grid-template-columns: repeat(10, 100px);
+            grid-template-rows: repeat(10, 100px);
+            background: #ffffff url("images/snakenladder.png") no-repeat center center; /* Placeholder image */
+            background-size: cover;
+            width: 1000px;
+            height: 1000px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 3px solid #84fab0;
+            position: relative;
+        }
+
+    
+        .board-unit {
+            width: 100px;
+            height: 100px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+   
+        .board-unit.active {
+            background-color: rgba(132, 250, 176, 0.2);
+            border: 2px solid #84fab0;
+        }
+
+        /* Player Pieces */
+        .piece {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            position: absolute;
+            transition: all 0.5s ease-in-out;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .red {
+            background-color: #ff6f61;
+            z-index: 2;
+        }
+
+        .yellow {
+            background-color: #f7d794;
+            z-index: 1;
+        }
+
+        /* Turn Display Styles */
+        #turn {
+            width: 300px;
+            padding: 20px;
+            background-color: #ffe7a1;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .turn-section {
+            display: none;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .turn-section.active {
+            display: block;
+        }
+
+        .turn-red {
+            background-color: #ff6f61;
+            color: white;
+        }
+
+        .turn-yellow {
+            background-color: #f7d794;
+            color: black;
+        }
+
+        .dice-div {
+            font-size: 40px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        @keyframes climb {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        @keyframes slide {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(20px); }
+            100% { transform: translateY(0); }
+        }
+
+        .climb {
+            animation: climb 0.5s ease-in-out;
+        }
+
+        .slide {
+            animation: slide 0.5s ease-in-out;
+        }
+
+        @media (max-width: 700px) {
+            #game-snake-container {
+                width: 90vw;
+                height: 90vw;
+                grid-template-columns: repeat(10, 1fr);
+                grid-template-rows: repeat(10, 1fr);
+            }
+
+            .piece {
+                width: 15px;
+                height: 15px;
+            }
+
+            .dice-div {
+                font-size: 30px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="snake-n-ladder">
+        <div id="turn">
+            <div class="turn-section turn-red active" id="turn-red">
+                <h1>TEAM <span>Red</span></h1>
+                <div class="dice-div" id="dice-red">🎲</div>
+                <p id="number-red">Roll the dice to start!</p>
+                <button id="btn-turn-red">Roll the dice</button>
+            </div>
+
+
+            <div class="turn-section turn-yellow" id="turn-yellow">
+                <h1>TEAM <span>Yellow</span></h1>
+                <div class="dice-div" id="dice-yellow">🎲</div>
+                <p id="number-yellow">Roll the dice to start!</p>
+                <button id="btn-turn-yellow">Roll the dice</button>
+            </div>
+        </div>
+        <div id="game-snake-container"></div>
+    </section>
+    <script src="script/games.js"></script>
+
+    <script>
+
+    const snakes = [
+        { from: 44, to: 19 },
+        { from: 50, to: 10 },
+        { from: 55, to: 12 },
+        { from: 72, to: 52 },
+        { from: 79, to: 40 },
+        { from: 94, to: 75 },
+        { from: 98, to: 65 }
+    ];
+
+    const ladders = [
+        { from: 6, to: 26 },
+        { from: 25, to: 65 },
+        { from: 39, to: 62 },
+        { from: 48, to: 67 },
+        { from: 58, to: 96 },
+        { from: 68, to: 74 },
+    ];
+
+    let redPosition = 1;
+    let yellowPosition = 1;
+
+
+    let currentTurn = 'red';
+
+    const snakeContainer = document.getElementById("game-snake-container");
+    const turnRedSection = document.getElementById("turn-red");
+    const turnYellowSection = document.getElementById("turn-yellow");
+    const btnRed = document.getElementById('btn-turn-red');
+    const btnYellow = document.getElementById('btn-turn-yellow');
+    const diceRed = document.getElementById('dice-red');
+    const diceYellow = document.getElementById('dice-yellow');
+    const numberRed = document.getElementById('number-red');
+    const numberYellow = document.getElementById('number-yellow');
+
+
+for (let row = 10; row >= 1; row--) {
+    if (row % 2 === 0) {
+        for (let col = 10; col >= 1; col--) { 
+            let cellNumber = (row - 1) * 10 + col;
+            createCell(cellNumber);
+        }
+    } else {
+        for (let col = 1; col <= 10; col++) {
+            let cellNumber = (row - 1) * 10 + col;
+            createCell(cellNumber);
+        }
+    }
+}
+
+
+    function createCell(number) {
+        let div = document.createElement('div');
+        div.className = "board-unit";
+        div.id = `cell-${number}`;
+       
+        snakeContainer.appendChild(div);
+    }
+
+  
+    const redPiece = document.createElement("div");
+    redPiece.className = "piece red";
+    snakeContainer.appendChild(redPiece);
+
+    const yellowPiece = document.createElement("div");
+    yellowPiece.className = "piece yellow";
+    snakeContainer.appendChild(yellowPiece);
+
+  
+    updatePlayerPosition('red', redPosition);
+    updatePlayerPosition('yellow', yellowPosition);
+
+  
+    btnRed.addEventListener('click', () => handleTurn('red'));
+    btnYellow.addEventListener('click', () => handleTurn('yellow'));
+
+    function handleTurn(team) {
+        if (currentTurn !== team) return; 
+
+       
+        let dice = rollDice();
+        updateDiceDisplay(team, dice);
+
+        if (team === 'red') {
+            movePlayer('red', dice);
+        } else {
+            movePlayer('yellow', dice);
+        }
+    }
+
+
+    function rollDice() {
+        return Math.floor(Math.random() * 6) + 1;
+    }
+
+ 
+    function updateDiceDisplay(team, number) {
+        if (team === 'red') {
+            diceRed.textContent = `🎲 ${number}`;
+            numberRed.textContent = `You rolled a ${number}!`;
+        } else {
+            diceYellow.textContent = `🎲 ${number}`;
+            numberYellow.textContent = `You rolled a ${number}!`;
+        }
+    }
+
+
+    function movePlayer(team, dice) {
+        let currentPos = team === 'red' ? redPosition : yellowPosition;
+        let newPos = currentPos + dice;
+
+        if (newPos > 100) {
+            newPos = currentPos; 
+            displayMessage(team, `Cannot move beyond 100! Stay at ${currentPos}.`);
+            switchTurn();
+            return;
+        }
+
+        let isSnake = snakes.find(s => s.from === newPos);
+        let isLadder = ladders.find(l => l.from === newPos);
+
+        if (isSnake) {
+            displayMessage(team, `Oh no! Bitten by a snake. Slide down to ${isSnake.to}.`);
+            newPos = isSnake.to;
+        } else if (isLadder) {
+            displayMessage(team, `Great! Climbed a ladder to ${isLadder.to}.`);
+            newPos = isLadder.to;
+        } else {
+            displayMessage(team, `Moved to ${newPos}.`);
+        }
+
+        animateMove(team, currentPos, newPos, () => {
+
+            if (team === 'red') {
+                redPosition = newPos;
+            } else {
+                yellowPosition = newPos;
+            }
+
+
+            if (newPos === 100) {
+                alert(`🎉 Team ${capitalize(team)} wins the game!`);
+                resetGame();
+                return;
+            }
+
+
+            switchTurn();
+        });
+    }
+
+    // Function to Animate Movement
+    function animateMove(team, from, to, callback) {
+        let piece = team === 'red' ? redPiece : yellowPiece;
+        let fromCell = document.getElementById(`cell-${from}`);
+        let toCell = document.getElementById(`cell-${to}`);
+
+        // Remove from current cell
+        fromCell.removeChild(piece);
+
+        // Append to new cell
+        toCell.appendChild(piece);
+
+        // Add Animation Class
+        if (to > from) {
+            piece.classList.add('climb');
+        } else if (to < from) {
+            piece.classList.add('slide');
+        }
+
+        // Remove Animation Class after Animation Ends
+        piece.addEventListener('animationend', function handler() {
+            piece.classList.remove('climb', 'slide');
+            piece.removeEventListener('animationend', handler);
+            callback();
+        });
+    }
+
+    // Function to Update Player Position on Board
+    function updatePlayerPosition(team, position) {
+        let cell = document.getElementById(`cell-${position}`);
+        if (team === 'red') {
+            cell.appendChild(redPiece);
+        } else {
+            cell.appendChild(yellowPiece);
+        }
+    }
+
+    // Function to Switch Turn
+    function switchTurn() {
+        if (currentTurn === 'red') {
+            currentTurn = 'yellow';
+            turnRedSection.classList.remove('active');
+            turnYellowSection.classList.add('active');
+        } else {
+            currentTurn = 'red';
+            turnYellowSection.classList.remove('active');
+            turnRedSection.classList.add('active');
+        }
+    }
+
+    // Function to Display Messages
+    function displayMessage(team, message) {
+        if (team === 'red') {
+            numberRed.textContent = message;
+        } else {
+            numberYellow.textContent = message;
+        }
+    }
+
+    // Function to Capitalize Team Name
+    function capitalize(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }
+
+    // Function to Reset the Game
+    function resetGame() {
+        // Reset Positions
+        redPosition = 1;
+        yellowPosition = 1;
+
+        // Move Pieces to Start
+        let startCell = document.getElementById('cell-1');
+        startCell.appendChild(redPiece);
+        startCell.appendChild(yellowPiece);
+
+        // Reset Messages
+        numberRed.textContent = `You are at position ${redPosition}. Roll to move!`;
+        numberYellow.textContent = `You are at position ${yellowPosition}. Wait for your turn.`;
+
+        // Set Turn to Red
+        currentTurn = 'red';
+        turnYellowSection.classList.remove('active');
+        turnRedSection.classList.add('active');
+
+        // Reset Dice
+        diceRed.textContent = '🎲';
+        diceYellow.textContent = '🎲';
+    }
+
+    // Initialize Game Messages
+    numberRed.textContent = `You are at position ${redPosition}. Roll to move!`;
+    numberYellow.textContent = `You are at position ${yellowPosition}. Wait for your turn.`;
+</script>
+</body>
+</html>

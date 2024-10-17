@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course</title>
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        background-color: #f4f4f4;
+    }
+
+    .navBar {
+        display: none;
+        position: absolute;
+        left: 0;
+        width: 250px;
+        top: 0;
+        height: 100%;
+        background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+        color: white;
+        transition: left 0.3s ease;
+        z-index: 1000;
+        overflow-y: auto;
+    }
+
+    .sidebar-hover-area {
+        position: absolute;
+        width: 25%;
+        height: 100%;
+        left: 0;
+        top: 0;
+        z-index: 900;
+    }
+
+    .navBar.open {
+        left: 0;
+    }
+
+    .sidebar {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        border-bottom: 1px solid #f3e1e1;
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 15px 20px;
+        color: white;
+        text-decoration: none;
+        transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+        background-color: #ecdddd;
+        color: rgb(245, 91, 117);
+    }
+
+    .container {
+        margin-left: 260px;
+        padding: 20px;
+        flex: 1;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    section {
+        margin-bottom: 30px;
+    }
+
+    .addnewCourse {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #Title {
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    #add-new-course {
+        background-color: #70c9e4;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #add-new-course:hover {
+        background-color: #eceeee;
+        color: rgb(82, 182, 212);
+    }
+
+    .display-courses {
+        margin-top: 20px;
+    }
+
+    .course-box {
+        background-color: #f9f9f9;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .course-box h2 {
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .course-box button {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+    .editCourse {
+        background-color: #70c9e4;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .deleteCourse {
+        background-color: #dc3545;
+        color: white;
+        margin-left: 10px;
+    }
+
+    .editCourse:hover {
+        background-color: #f0f0f0;
+        color: #28a745;
+    }
+
+    .deleteCourse:hover {
+        background-color: #c82333;
+    }
+</style>
+
+<body>
+    <div class="sidebar-hover-area"></div>
+
+    <section class="navBar">
+        <ul class="sidebar">
+            <li><a href="Admin/Event.html">Events</a></li>
+            <li><a href="Admin/Story.html">Stories</a></li>
+            <li><a href="Admin/quiz.html">Quizzes</a></li>
+            <li><a href="CourseAdmin.html">Course</a></li>
+        </ul>
+    </section>
+    <div class="container">
+        <section class="addnewCourse">
+            <label for="courseTitle">Add new Course</label>
+            <input type="text" name="" id="Title">
+            <button id="add-new-course">Add</button>
+        </section>
+        <section class="display-courses">
+
+        </section>
+
+    </div>
+
+    <script src="script/course.js">
+
+
+    </script>
+</body>
+
+</html>

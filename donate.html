@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<!-- setting primary language to website -->
+<html lang="en">
+
+<head>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="name" content="Shreya">
+        <meta name="description" content="This website has information about children Zoo">
+
+        <title>Welcome to the Jungle</title>
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+
+        <!-- Leaflet CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        <!-- Leaflet JS -->
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+        <!-- Add your stylesheets -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="style/style.css">
+
+        <style>
+            .nav-link.disabled {
+                pointer-events: none;
+                color: gray;
+                text-decoration: line-through;
+
+            }
+
+            .donate-box {
+                font-family: 'Comic Sans MS', sans-serif;
+                background-color: #f8f8f6;
+                margin: 0;
+                padding: 20px;
+                display: flex;
+                justify-content: center;
+                height: 100%;
+            }
+
+            h1 {
+                text-align: center;
+                color: #FF6F61;
+                font-size: 36px;
+                margin-bottom: 20px;
+                text-shadow: 2px 2px #FFD700;
+            }
+
+            .donation-container {
+               
+                margin-top: 20px;
+                width: 45%;
+            }
+
+            .donation-card {
+                background-color: #FFF1F0;
+                border-radius: 20px;
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+                width: 80%;
+                margin-bottom: 20px;
+                padding: 20px;
+                text-align: center;
+                border: 3px dashed #FFD700;
+            }
+
+            .progress-bar {
+                height: 20px;
+                width: 100%;
+                background-color: #FFE4C4;
+                border-radius: 10px;
+                overflow: hidden;
+                margin-bottom: 10px;
+            }
+
+            .progress {
+                height: 100%;
+                width: 0%;
+                background-color: #FF6F61;
+                border-radius: 10px;
+            }
+
+            .donate-btn,
+            .view-btn {
+                margin: 5px;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            .donate-btn {
+                background-color: #FFD700;
+                color: #FF6F61;
+            }
+
+            .view-btn {
+                background-color: #d478d4;
+                color: white;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
+            }
+
+            .modal-content {
+                background-color: #FFF1F0;
+                padding: 20px;
+                border-radius: 20px;
+                width: 400px;
+                border: 3px dashed #FFD700;
+            }
+
+            .close {
+                float: right;
+                font-size: 24px;
+                cursor: pointer;
+                color: #FF6F61;
+            }
+
+            input[type="text"],
+            input[type="number"] {
+                width: 80%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 2px solid #FF6F61;
+                border-radius: 10px;
+                font-family: 'Comic Sans MS', sans-serif;
+            }
+
+            .submit-btn {
+                background-color: #FFD700;
+                color: #FF6F61;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+                background-color: #FFF1F0;
+            }
+
+            th,
+            td {
+                padding: 10px;
+                border: 2px solid #FF6F61;
+                text-align: center;
+                font-family: 'Comic Sans MS', sans-serif;
+            }
+
+            th {
+                background-color: #FFD700;
+            }
+
+            .filter-sort {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+
+            .filter-sort input {
+                padding: 10px;
+                border: 2px solid #FF6F61;
+                border-radius: 10px;
+                font-family: 'Comic Sans MS', sans-serif;
+            }
+
+            .sort-btn {
+                background-color: #FFD700;
+                color: #FF6F61;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                font-size: 16px;
+
+            }
+            .donateClothes {
+            display: inline-block;
+            width: 45%;
+            background-color: #e6dfdf;
+            padding: 20px;
+            height: 100vh;
+            border-radius: 15px;
+        }
+
+        #map {
+            width: 100%;
+            height: 400px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #FF6F61;
+            border-radius: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        </style>
+    </head>
+
+<body background="./images/bg.png">
+
+    <header id="header">
+        <nav id="nav-header" class="navbar navbar-expand-md navbar-light ">
+            <div class="container-fluid">
+                <!-- Logo -->
+                <a id="logo" class="navbar-brand" href="#">
+                    <img src="https://png.pngtree.com/png-vector/20240318/ourmid/pngtree-golden-lion-head-mascot-png-image_12003243.png"
+                        alt="Logo" width="40">
+                </a>
+
+                <!-- Toggler for mobile view -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar content -->
+                <div id="navbarNav" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="explore.html">Explore</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="events.html">Events</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="story.html">Story</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="games.html">Games</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="drawing.html">Drawing</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="course.html">Courses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="quiz.html">Quiz</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About
+                                Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="Frequently.html">faq</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="contact.html">Contact
+                                Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"><button id="user-login"><span class="user-who"></span></button></a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <h1>Donate to Help Children</h1>
+    <section class="donate-box">
+        <div class="donation-container">
+            <div class="donation-card" data-target="1000000" data-collected="0">
+                <h2>Orphans</h2>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <button class="donate-btn">Donate</button>
+                <button class="view-btn">View Donations</button>
+            </div>
+
+            <div class="donation-card" data-target="1000000" data-collected="0">
+                <h2>Big Charity</h2>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <button class="donate-btn">Donate</button>
+                <button class="view-btn">View Donations</button>
+            </div>
+
+            <div class="donation-card" data-target="1000000" data-collected="0">
+                <h2>Cancer</h2>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <button class="donate-btn">Donate</button>
+                <button class="view-btn">View Donations</button>
+            </div>
+        </div>
+
+
+
+        <div id="donateModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Donate Now</h2>
+                <input type="text" id="donorName" placeholder="Your Name">
+                <input type="text" id="donorAddress" placeholder="Your Address">
+                <input type="number" id="donationAmount" placeholder="Amount">
+                <button class="submit-btn" id="submitDonation">Submit Donation</button>
+            </div>
+        </div>
+
+        <div id="viewModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>View Donations</h2>
+
+                <div class="filter-sort">
+                    <input type="text" id="filterByName" placeholder="Filter by Name">
+                    <input type="number" id="minAmount" placeholder="Min Donation">
+                    <input type="number" id="maxAmount" placeholder="Max Donation">
+                    <button class="sort-btn" id="sortByAmount">Sort by Amount</button>
+                </div>
+
+                <table id="donationTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Address</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="donateClothes">
+            <h1>Donate Clothes</h1>
+            <label for="ask">Ask for pickup</label>
+            <button id="ask-btn">Ask for Pickup</button>
+
+            <div>
+                <p>Enter Location:</p>
+                <button id="current-location">Choose CURRENT location</button>
+                <button id="pin-location">Pin on map</button>
+                <input type="text" id="location" placeholder="Location will be displayed here" readonly />
+            </div>
+
+            <div id="map"></div>
+            <button id="submitLocation">Submit Location</button>
+        </div>
+    </section>
+
+    <script>
+        const donateBtns = document.querySelectorAll('.donate-btn');
+        const viewBtns = document.querySelectorAll('.view-btn');
+        const donateModal = document.getElementById('donateModal');
+        const viewModal = document.getElementById('viewModal');
+        const closeBtns = document.querySelectorAll('.close');
+        const submitDonationBtn = document.getElementById('submitDonation');
+        const donationTable = document.querySelector('#donationTable tbody');
+
+        let currentCard = null;
+        let donations = [];
+
+        donateBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                currentCard = e.target.closest('.donation-card');
+                donateModal.style.display = 'flex';
+            });
+        });
+
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                viewModal.style.display = 'flex';
+                displayDonations(donations);
+            });
+        });
+
+        closeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                donateModal.style.display = 'none';
+                viewModal.style.display = 'none';
+            });
+        });
+
+        submitDonationBtn.addEventListener('click', () => {
+            const name = document.getElementById('donorName').value;
+            const address = document.getElementById('donorAddress').value;
+            const amount = parseInt(document.getElementById('donationAmount').value);
+            const target = parseInt(currentCard.getAttribute('data-target'));
+            let collected = parseInt(currentCard.getAttribute('data-collected'));
+
+            if (amount > 0 && name && address) {
+                collected += amount;
+                currentCard.setAttribute('data-collected', collected);
+                const progress = (collected / target) * 100;
+                currentCard.querySelector('.progress').style.width = progress + '%';
+
+                donations.push({ name, address, amount });
+                donateModal.style.display = 'none';
+                document.getElementById('donorName').value = '';
+                document.getElementById('donorAddress').value = '';
+                document.getElementById('donationAmount').value = '';
+            }
+        });
+
+        function displayDonations(filteredDonations = donations) {
+            donationTable.innerHTML = '';
+            filteredDonations.forEach(donation => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${donation.name}</td><td>${donation.address}</td><td>${donation.amount}</td>`;
+                donationTable.appendChild(row);
+            });
+        }
+
+        function filterDonations() {
+            let nameFilter = document.getElementById('filterByName').value.toLowerCase();
+            let minAmount = parseInt(document.getElementById('minAmount').value) || 0;
+            let maxAmount = parseInt(document.getElementById('maxAmount').value) || Infinity;
+
+            let filteredDonations = donations.filter(donation => {
+                return donation.name.toLowerCase().includes(nameFilter) &&
+                    donation.amount >= minAmount &&
+                    donation.amount <= maxAmount;
+            });
+
+            displayDonations(filteredDonations);
+        }
+
+        document.getElementById('filterByName').addEventListener('input', filterDonations);
+        document.getElementById('minAmount').addEventListener('input', filterDonations);
+        document.getElementById('maxAmount').addEventListener('input', filterDonations);
+
+        let sortOrder = {
+            name: true,
+            amount: true
+        };
+
+
+
+        document.getElementById('sortByAmount').addEventListener('click', () => {
+            donations.sort((a, b) => {
+                if (sortOrder.amount) {
+                    return a.amount - b.amount;
+                } else {
+                    return b.amount - a.amount;
+                }
+            });
+            sortOrder.amount = !sortOrder.amount;
+            filterDonations();
+        });
+
+
+        let map, markers = [];
+
+        function initMap() {
+            map = L.map('map').setView([18.5204, 73.8567], 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            map.on('click', function (e) {
+                placeMarker(e.latlng);
+                document.getElementById('location').value = `Latitude: ${e.latlng.lat}, Longitude: ${e.latlng.lng}`; // Update location input
+            });
+        }
+
+
+        function placeMarker(latlng) {
+
+            const marker = L.marker(latlng).addTo(map);
+            markers.push(marker);
+        }
+
+
+        document.getElementById('current-location').addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const latlng = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    map.setView(latlng, 13);
+                    placeMarker(latlng);
+                    document.getElementById('location').value = `Latitude: ${latlng.lat}, Longitude: ${latlng.lng}`; // Update location input
+                }, () => {
+                    alert('Error: Unable to fetch your current location.');
+                });
+            } else {
+                alert('Geolocation is not supported by your browser.');
+            }
+        });
+
+
+        document.getElementById('submitLocation').addEventListener('click', () => {
+            const locationValue = document.getElementById('location').value;
+            if (locationValue) {
+                alert(`Location submitted: ${locationValue}`);
+            } else {
+                alert('Please select or pin a location before submitting.');
+            }
+        });
+
+
+        window.onload = initMap;
+
+    </script>
+    <script src="nav.js"></script>
+</body>
+
+</html>

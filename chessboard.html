@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10x10 Chess Board - Snake Ladder Style</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        background-color: #f0f0f0;
+    }
+
+    #chessboard {
+        display: grid;
+        grid-template-columns: repeat(10, 100px);
+        grid-template-rows: repeat(10, 100px);
+        width: 1000px;
+        height: 1000px;
+        border: 1px solid #ffffff;
+    }
+
+    .square {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px; 
+        color: rgb(37, 35, 35);
+        font-weight: bold;
+        font-family: Arial, sans-serif;
+        text-align: center;
+        line-height: 1; 
+    }
+
+    .blue {
+        background-color: #94cef5;
+    }
+
+    .pink {
+        background-color: #bb9ef1;
+    }
+</style>
+
+<body>
+    <div id="chessboard"></div>
+    <script>
+        const chessboard = document.getElementById('chessboard');
+
+        let count = 100;
+
+        for (let row = 10; row > 0; row--) {
+            if (row % 2 == 0) {
+                for (let col = 0; col < 10; col++) {
+                    let div = document.createElement('div');
+                    div.classList.add('square'); 
+
+                    let content = row * 10 - col;
+                    div.textContent = `${content}`;
+                  
+                    chessboard.appendChild(div);
+                }
+            } else {
+                for (let col = 9; col >= 0; col--) {
+                    let div = document.createElement('div');
+                    div.classList.add('square'); 
+
+                    let content = row * 10 - col;
+                    div.textContent = `${content}`;
+                    chessboard.appendChild(div);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

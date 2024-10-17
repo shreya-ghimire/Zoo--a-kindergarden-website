@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balloon Popper Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.game-container {
+    text-align: center;
+}
+
+h1 {
+    font-size: 36px;
+    color: #333;
+}
+
+.balloon-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background-color: #e0f7fa;
+    border: 2px solid #333;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.balloon {
+    position: absolute;
+    width: 60px;
+    height: 80px;
+    background-color: red;
+    border-radius: 50%;
+    bottom: -100px; 
+    cursor: pointer;
+    animation: float 6s linear infinite;
+}
+
+.balloon::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 2px;
+    height: 15px;
+    background-color: #333;
+    transform: translateX(-50%);
+}
+
+@keyframes float {
+    from {
+        transform: translateY(600px);
+    }
+    to {
+        transform: translateY(-800px);
+    }
+}
+
+.score {
+    font-size: 24px;
+    margin-top: 20px;
+}
+
+.popped {
+    visibility: hidden;
+}
+
+</style>
+<body>
+    <div class="game-container">
+        <h1>Balloon Popper Game</h1>
+        <div class="balloon-container" id="balloon-container"></div>
+        <div class="score">
+            <p>Score: <span id="score">0</span></p>
+        </div>
+    </div>
+    <script>
+        const balloonContainer = document.getElementById('balloon-container');
+const scoreElement = document.getElementById('score');
+let score = 0;
+
+
+function createBalloon() {
+    const balloon = document.createElement('div');
+    balloon.classList.add('balloon');
+    
+   
+    const colors = ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56', '#4bc0c0'];
+    balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+ 
+    balloon.style.left = Math.random() * (balloonContainer.offsetWidth - 60) + 'px';
+
+
+    balloon.addEventListener('click', popBalloon);
+
+    balloonContainer.appendChild(balloon);
+
+  
+    setTimeout(() => {
+        balloon.remove();
+    }, 6000); 
+}
+
+
+function popBalloon() {
+    this.classList.add('popped'); 
+    score++;
+    scoreElement.textContent = score; 
+
+    
+    setTimeout(() => {
+        this.remove();
+    }, 100); 
+}
+
+
+setInterval(createBalloon, 1000);
+
+    </script>
+</body>
+</html>

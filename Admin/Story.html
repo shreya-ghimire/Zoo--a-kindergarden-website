@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Form</title>
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+
+            background-color: #f4f4f4;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: #333;
+        }
+
+        .sidebar-hover-area {
+            position: absolute;
+            width: 25%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .navBar {
+            display: none;
+            position: absolute;
+            left: 0;
+            width: 250px;
+            top: 0;
+            height: 100%;
+            background-image: linear-gradient(to right, #f78ca0 0%, #f9748f 19%, #fd868c 60%, #fe9a8b 100%);
+            color: white;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .navBar.open {
+            display: block;
+        }
+
+        .sidebar {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            border-bottom: 1px solid #fffdfd;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background-color: #ecdddd;
+            color: rgb(245, 91, 117);
+        }
+
+        .container {
+            margin-left: 270px;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #70c9e4;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        #chapters {
+            margin-top: 20px;
+        }
+
+        .chapter-form {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        #stories-container {
+            margin-top: 30px;
+        }
+
+        .story {
+            background: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .table th,
+        .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="sidebar-hover-area"></div>
+
+    <section class="navBar">
+        <ul class="sidebar">
+            <li><a href="Event.html">Events</a></li>
+            <li><a href="Story.html">Stories</a></li>
+            <li><a href="quiz.html">Quizzes</a></li>
+            <li><a href="../CourseAdmin.html">Course</a></li>
+        </ul>
+    </section>
+
+
+    <div class="container">
+        <h1>Story Form</h1>
+        <form id="story-form">
+            <div class="form-group">
+                <label for="story-title">Story Title</label>
+                <input type="text" id="story-title" placeholder="Story Title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="author-name">Author</label>
+                <input type="text" id="author-name" placeholder="Author Name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="story-image">Story Image Filename (e.g., abc.jpg)</label>
+                <input type="text" id="story-image" placeholder="Enter image filename" required>
+            </div>
+
+            <div id="chapters"></div>
+
+            <button type="button" id="add-chapter">Add New Chapter</button>
+            <button type="submit" id="submit">Submit Story</button>
+        </form>
+
+        <h2>Stored Stories</h2>
+        <div id="stories-container"></div>
+    </div>
+
+    <script>
+
+        document.addEventListener('keydown', function (event) {
+
+            if (event.key === "Tab") {
+
+                event.preventDefault();
+                document.querySelector('.navBar').style.display = 'block';
+            }
+
+            else if (event.key === "Escape") {
+                document.querySelector('.navBar').style.display = 'none';
+            }
+        });
+
+
+        let chapters = [];
+        let stories = JSON.parse(localStorage.getItem('stories')) || [];
+
+        function generateId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        document.getElementById('add-chapter').addEventListener('click', function () {
+            const chapterForm = document.createElement('div');
+            chapterForm.classList.add('chapter-form');
+
+            chapterForm.innerHTML = `
+                <div class="form-group">
+                    <label for="chapter-title">Chapter Title</label>
+                    <input type="text" class="chapter-title" placeholder="Chapter Title" >
+                </div>
+                <div class="form-group">
+                    <label for="chapter-content">Chapter Content</label>
+                    <textarea class="chapter-content" placeholder="Chapter Content"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="chapter-image">Chapter Image Filename </label>
+                    <input type="text" class="chapter-image" placeholder="Enter image filename">
+                </div>
+                <button type="button" class="add-chapter-btn">Add Chapter</button>
+            `;
+
+            document.getElementById('chapters').appendChild(chapterForm);
+
+            chapterForm.querySelector('.add-chapter-btn').addEventListener('click', function () {
+                const chapterTitle = chapterForm.querySelector('.chapter-title').value;
+                const chapterContent = chapterForm.querySelector('.chapter-content').value;
+                const chapterImage = chapterForm.querySelector('.chapter-image').value;
+
+                const chapter = {
+                    id: generateId(),
+                    title: chapterTitle,
+                    content: chapterContent,
+                    image: chapterImage
+                };
+
+                chapters.push(chapter);
+
+                chapterForm.querySelector('.chapter-title').value = '';
+                chapterForm.querySelector('.chapter-content').value = '';
+                chapterForm.querySelector('.chapter-image').value = '';
+
+
+                alert('Chapter added!');
+
+            });
+        });
+
+        document.getElementById('story-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const storyTitle = document.getElementById('story-title').value;
+            const authorName = document.getElementById('author-name').value;
+            const storyImageFile = document.getElementById('story-image').value;
+
+            const story = {
+                id: generateId(),
+                title: storyTitle,
+                author: authorName,
+                image: storyImageFile,
+                chapters: chapters
+            };
+
+            stories.push(story);
+
+            localStorage.setItem('stories', JSON.stringify(stories));
+
+            document.getElementById('story-form').reset();
+            chapters = [];
+            document.getElementById('chapters').innerHTML = '';
+            alert('Story submitted!');
+            displayStories();
+        });
+
+        function displayStories() {
+            const storiesContainer = document.getElementById('stories-container');
+            storiesContainer.innerHTML = '';
+
+            stories.forEach(story => {
+                const storyDiv = document.createElement('div');
+                storyDiv.classList.add('story');
+                storyDiv.innerHTML = `
+                    <h3>${story.title} by ${story.author}</h3>
+                    <img src="${story.image}" alt="${story.title}" style="width:100px; height:auto;">
+                    <h4>Chapters</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Content</th>
+                                <th>Image</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${story.chapters.map(chapter => `
+                                <tr>
+                                    <td>${chapter.title}</td>
+                                    <td>${chapter.content}</td>
+                                    <td>./images/${chapter.image}</td>
+                                    <td>
+                                        <button class="edit-chapter-btn" data-story-id="${story.id}" data-chapter-id="${chapter.id}">Edit</button>
+                                        <button class="delete-chapter-btn" data-story-id="${story.id}" data-chapter-id="${chapter.id}">Delete</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <button class="edit-story-btn" data-story-id="${story.id}">Edit Story</button>
+                    <button class="delete-story-btn" data-story-id="${story.id}">Delete Story</button>
+                `;
+                storiesContainer.appendChild(storyDiv);
+            });
+
+
+            attachChapterActions();
+            attachStoryActions();
+        }
+
+        function attachChapterActions() {
+            document.querySelectorAll('.edit-chapter-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const storyId = this.getAttribute('data-story-id');
+                    const chapterId = this.getAttribute('data-chapter-id');
+
+                    const story = stories.find(s => s.id === storyId);
+                    const chapter = story.chapters.find(c => c.id === chapterId);
+
+                    document.getElementById('story-title').value = story.title;
+                    document.getElementById('author-name').value = story.author;
+                    document.getElementById('story-image').value = story.image;
+
+                    document.getElementById('chapters').innerHTML = '';
+
+                    story.chapters.forEach(ch => {
+                        const chapterForm = document.createElement('div');
+                        chapterForm.classList.add('chapter-form');
+
+                        chapterForm.innerHTML = `
+                            <div class="form-group">
+                                <label for="chapter-title">Chapter Title</label>
+                                <input type="text" class="chapter-title" value="${ch.title}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="chapter-content">Chapter Content</label>
+                                <textarea class="chapter-content" required>${ch.content}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="chapter-image">Chapter Image Filename </label>
+                                <input type="text" class="chapter-image" value="${ch.image}">
+                            </div>
+                            <button type="button" class="update-chapter-btn" data-story-id="${story.id}" data-chapter-id="${ch.id}">Update Chapter</button>
+                        `;
+
+                        document.getElementById('chapters').appendChild(chapterForm);
+
+                        chapterForm.querySelector('.update-chapter-btn').addEventListener('click', function () {
+                            ch.title = chapterForm.querySelector('.chapter-title').value;
+                            ch.content = chapterForm.querySelector('.chapter-content').value;
+                            ch.image = chapterForm.querySelector('.chapter-image').value;
+
+                            localStorage.setItem('stories', JSON.stringify(stories));
+                            alert('Chapter updated!');
+                            displayStories();
+                        });
+                    });
+                });
+            });
+
+            document.querySelectorAll('.delete-chapter-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const storyId = this.getAttribute('data-story-id');
+                    const chapterId = this.getAttribute('data-chapter-id');
+
+                    const story = stories.find(s => s.id === storyId);
+                    story.chapters = story.chapters.filter(c => c.id !== chapterId);
+
+                    localStorage.setItem('stories', JSON.stringify(stories));
+                    alert('Chapter deleted!');
+                    displayStories();
+                });
+            });
+        }
+
+
+        function attachStoryActions() {
+            document.querySelectorAll('.edit-story-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const storyId = this.getAttribute('data-story-id');
+                    const story = stories.find(s => s.id === storyId);
+
+                    document.getElementById('story-title').value = story.title;
+                    document.getElementById('author-name').value = story.author;
+                    document.getElementById('story-image').value = story.image;
+
+
+                    chapters = story.chapters;
+                    document.getElementById('chapters').innerHTML = '';
+
+                    story.chapters.forEach(ch => {
+                        const chapterForm = document.createElement('div');
+                        chapterForm.classList.add('chapter-form');
+
+                        chapterForm.innerHTML = `
+                            <div class="form-group">
+                                <label for="chapter-title">Chapter Title</label>
+                                <input type="text" class="chapter-title" value="${ch.title}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="chapter-content">Chapter Content</label>
+                                <textarea class="chapter-content" required>${ch.content}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="chapter-image">Chapter Image Filename </label>
+                                <input type="text" class="chapter-image" value="${ch.image}">
+                            </div>
+                            <button type="button" class="update-chapter-btn" data-story-id="${story.id}" data-chapter-id="${ch.id}">Update Chapter</button>
+                        `;
+
+                        document.getElementById('chapters').appendChild(chapterForm);
+
+                        chapterForm.querySelector('.update-chapter-btn').addEventListener('click', function () {
+                            ch.title = chapterForm.querySelector('.chapter-title').value;
+                            ch.content = chapterForm.querySelector('.chapter-content').value;
+                            ch.image = chapterForm.querySelector('.chapter-image').value;
+
+                            localStorage.setItem('stories', JSON.stringify(stories));
+                            alert('Chapter updated!');
+                            displayStories();
+                        });
+                    });
+
+
+                    stories = stories.filter(s => s.id !== storyId);
+                });
+            });
+
+            document.querySelectorAll('.delete-story-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const storyId = this.getAttribute('data-story-id');
+
+                    stories = stories.filter(s => s.id !== storyId);
+
+
+                    localStorage.setItem('stories', JSON.stringify(stories));
+                    alert('Story deleted!');
+                    displayStories();
+                });
+            });
+        }
+
+
+        displayStories();
+    </script>
+
+</body>
+
+</html>
